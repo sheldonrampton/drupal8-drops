@@ -1,0 +1,11 @@
+global:
+  version: 1.x
+  css:
+    theme:
+      css/style.css: {}
+      css/responsive.css: {}
+      #css/local.css: {}
+  js:
+    js/jquery.cycle.lite.js: {}
+  dependencies:
+    - core/jquery
