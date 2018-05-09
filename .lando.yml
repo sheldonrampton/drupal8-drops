@@ -1,0 +1,4 @@
+name: sheldonrampton-com
+recipe: drupal8
+config:
+  webroot: .
