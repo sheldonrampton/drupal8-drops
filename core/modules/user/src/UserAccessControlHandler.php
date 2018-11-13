@@ -1,13 +1,9 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\user\UserAccessControlHandler.
- */
-
 namespace Drupal\user;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultNeutral;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityAccessControlHandler;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -22,10 +18,24 @@ use Drupal\Core\Session\AccountInterface;
 class UserAccessControlHandler extends EntityAccessControlHandler {
 
   /**
+   * Allow access to user label.
+   *
+   * @var bool
+   */
+  protected $viewLabelOperation = TRUE;
+
+  /**
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
     /** @var \Drupal\user\UserInterface $entity*/
+
+    // We don't treat the user label as privileged information, so this check
+    // has to be the first one in order to allow labels for all users to be
+    // viewed, including the special anonymous user.
+    if ($operation === 'view label') {
+      return AccessResult::allowed();
+    }
 
     // The anonymous user's profile can neither be viewed, updated nor deleted.
     if ($entity->isAnonymous()) {
@@ -41,11 +51,14 @@ class UserAccessControlHandler extends EntityAccessControlHandler {
       case 'view':
         // Only allow view access if the account is active.
         if ($account->hasPermission('access user profiles') && $entity->isActive()) {
-          return AccessResult::allowed()->cachePerPermissions()->cacheUntilEntityChanges($entity);
+          return AccessResult::allowed()->cachePerPermissions()->addCacheableDependency($entity);
         }
         // Users can view own profiles at all times.
         elseif ($account->id() == $entity->id()) {
           return AccessResult::allowed()->cachePerUser();
+        }
+        else {
+          return AccessResultNeutral::neutral("The 'access user profiles' permission is required and the user must be active.")->cachePerPermissions()->addCacheableDependency($entity);
         }
         break;
 
@@ -67,9 +80,9 @@ class UserAccessControlHandler extends EntityAccessControlHandler {
    */
   protected function checkFieldAccess($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, FieldItemListInterface $items = NULL) {
     // Fields that are not implicitly allowed to administrative users.
-    $explicit_check_fields = array(
+    $explicit_check_fields = [
       'pass',
-    );
+    ];
 
     // Administrative users are allowed to edit and view all fields.
     if (!in_array($field_definition->getName(), $explicit_check_fields) && $account->hasPermission('administer users')) {
@@ -93,7 +106,7 @@ class UserAccessControlHandler extends EntityAccessControlHandler {
           return AccessResult::allowed()->cachePerPermissions()->cachePerUser();
         }
         else {
-          return AccessResult::forbidden();
+          return AccessResult::neutral();
         }
 
       case 'preferred_langcode':
@@ -103,7 +116,7 @@ class UserAccessControlHandler extends EntityAccessControlHandler {
         // Allow view access to own mail address and other personalization
         // settings.
         if ($operation == 'view') {
-          return $is_own_account ? AccessResult::allowed()->cachePerUser() : AccessResult::forbidden();
+          return $is_own_account ? AccessResult::allowed()->cachePerUser() : AccessResult::neutral();
         }
         // Anyone that can edit the user can also edit this field.
         return AccessResult::allowed()->cachePerPermissions();
@@ -114,14 +127,14 @@ class UserAccessControlHandler extends EntityAccessControlHandler {
 
       case 'created':
         // Allow viewing the created date, but not editing it.
-        return ($operation == 'view') ? AccessResult::allowed() : AccessResult::forbidden();
+        return ($operation == 'view') ? AccessResult::allowed() : AccessResult::neutral();
 
       case 'roles':
       case 'status':
       case 'access':
       case 'login':
       case 'init':
-        return AccessResult::forbidden();
+        return AccessResult::neutral();
     }
 
     return parent::checkFieldAccess($operation, $field_definition, $account, $items);

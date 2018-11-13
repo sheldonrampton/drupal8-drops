@@ -1,16 +1,12 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\Core\Render\Element\MachineNameTest.
- */
+namespace Drupal\Tests\Core\Render\Element;
 
-namespace Drupal\Tests\Core\Render\Element {
-
-  use Drupal\Core\Form\FormState;
-  use Drupal\Core\Form\FormStateInterface;
-  use Drupal\Core\Language\LanguageInterface;
-  use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Access\CsrfTokenGenerator;
+use Drupal\Core\Form\FormState;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Render\Element\MachineName;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -46,7 +42,6 @@ class MachineNameTest extends UnitTestCase {
     return $data;
   }
 
-
   /**
    * @covers ::processMachineName
    */
@@ -64,7 +59,11 @@ class MachineNameTest extends UnitTestCase {
         'maxlength' => 32,
         'additional_property' => TRUE,
         '#additional_property_with_hash' => TRUE,
-      ]
+      ],
+      // The process function requires these to be set. During regular form
+      // building they are always set.
+      '#name' => 'test_machine_name',
+      '#default_value' => NULL,
     ];
 
     $complete_form = [
@@ -72,7 +71,7 @@ class MachineNameTest extends UnitTestCase {
         '#type' => 'textfield',
         '#id' => 'source',
       ],
-      'test_machine_name' => $element
+      'test_machine_name' => $element,
     ];
 
     $form_state->setCompleteForm($complete_form);
@@ -83,8 +82,12 @@ class MachineNameTest extends UnitTestCase {
     $language_manager = $this->prophesize(LanguageManagerInterface::class);
     $language_manager->getCurrentLanguage()->willReturn($language);
 
+    $csrf_token = $this->prophesize(CsrfTokenGenerator::class);
+    $csrf_token->get('[^a-z0-9_]+')->willReturn('tis-a-fine-token');
+
     $container = $this->prophesize(ContainerInterface::class);
     $container->get('language_manager')->willReturn($language_manager->reveal());
+    $container->get('csrf_token')->willReturn($csrf_token->reveal());
     \Drupal::setContainer($container->reveal());
 
     $element = MachineName::processMachineName($element, $form_state, $complete_form);
@@ -98,7 +101,8 @@ class MachineNameTest extends UnitTestCase {
       'label',
       'field_prefix',
       'field_suffix',
-      'suffix'
+      'suffix',
+      'replace_token',
     ];
     $this->assertEmpty(array_diff_key($settings, array_flip($allowed_options)));
     foreach ($allowed_options as $key) {
@@ -108,12 +112,12 @@ class MachineNameTest extends UnitTestCase {
 
 }
 
-}
+namespace Drupal\Core\Render\Element;
 
-namespace {
-  if (!function_exists('t')) {
-    function t($string, array $args = []) {
-      return strtr($string, $args);
-    }
+if (!function_exists('t')) {
+
+  function t($string, array $args = []) {
+    return strtr($string, $args);
   }
+
 }
