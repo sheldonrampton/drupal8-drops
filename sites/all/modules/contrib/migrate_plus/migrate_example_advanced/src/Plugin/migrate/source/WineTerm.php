@@ -1,17 +1,11 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\migrate_example_advanced\Plugin\migrate\source\WineTerm.
- */
-
 namespace Drupal\migrate_example_advanced\Plugin\migrate\source;
 
 use Drupal\migrate\Plugin\migrate\source\SqlBase;
 
 /**
- * A straight-forward SQL-based source plugin, to retrieve category data from
- * the source database.
+ * A SQL-based source plugin, to retrieve category data from a source database.
  *
  * @MigrateSource(
  *   id = "wine_term"
@@ -23,8 +17,16 @@ class WineTerm extends SqlBase {
    * {@inheritdoc}
    */
   public function query() {
+    $fields = [
+      'categoryid',
+      'type',
+      'name',
+      'details',
+      'category_parent',
+      'ordering',
+    ];
     return $this->select('migrate_example_advanced_categories', 'wc')
-      ->fields('wc', ['categoryid', 'type', 'name', 'details', 'category_parent', 'ordering'])
+      ->fields('wc', $fields)
       // This sort assures that parents are saved before children.
       ->orderBy('category_parent', 'ASC');
   }

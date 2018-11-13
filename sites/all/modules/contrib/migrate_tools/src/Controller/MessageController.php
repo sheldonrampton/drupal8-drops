@@ -1,17 +1,14 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\migrate_tools\Controller\MessageController.
- */
-
 namespace Drupal\migrate_tools\Controller;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
-use Drupal\migrate\Entity\Migration;
-use Drupal\migrate\Entity\MigrationInterface;
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Plugin\MigrationPluginManagerInterface;
+use Drupal\migrate_plus\Entity\MigrationGroupInterface;
+use Drupal\migrate_plus\Entity\MigrationInterface as MigratePlusMigrationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -27,11 +24,19 @@ class MessageController extends ControllerBase {
   protected $database;
 
   /**
+   * Plugin manager for migration plugins.
+   *
+   * @var \Drupal\migrate\Plugin\MigrationPluginManagerInterface
+   */
+  protected $migrationPluginManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('database')
+      $container->get('database'),
+      $container->get('plugin.manager.migration')
     );
   }
 
@@ -40,9 +45,12 @@ class MessageController extends ControllerBase {
    *
    * @param \Drupal\Core\Database\Connection $database
    *   A database connection.
+   * @param \Drupal\migrate\Plugin\MigrationPluginManagerInterface $migration_plugin_manager
+   *   The migration plugin manager.
    */
-  public function __construct(Connection $database) {
+  public function __construct(Connection $database, MigrationPluginManagerInterface $migration_plugin_manager) {
     $this->database = $database;
+    $this->migrationPluginManager = $migration_plugin_manager;
   }
 
   /**
@@ -65,15 +73,19 @@ class MessageController extends ControllerBase {
    *
    * Messages are truncated at 56 chars.
    *
+   * @param \Drupal\migrate_plus\Entity\MigrationGroupInterface $migration_group
+   *   The migration group.
+   * @param \Drupal\migrate_plus\Entity\MigrationInterface $migration
+   *   The $migration.
+   *
    * @return array
    *   A render array as expected by drupal_render().
    */
-  public function overview($migration_group, $migration) {
+  public function overview(MigrationGroupInterface $migration_group, MigratePlusMigrationInterface $migration) {
     $rows = [];
     $classes = static::getLogLevelClassMap();
-    /** @var MigrationInterface $migration */
-    $migration = Migration::load($migration);
-    $source_id_field_names = array_keys($migration->getSourcePlugin()->getIds());
+    $migration_plugin = $this->migrationPluginManager->createInstance($migration->id(), $migration->toArray());
+    $source_id_field_names = array_keys($migration_plugin->getSourcePlugin()->getIds());
     $column_number = 1;
     foreach ($source_id_field_names as $source_id_field_name) {
       $header[] = [
@@ -92,11 +104,14 @@ class MessageController extends ControllerBase {
       'field' => 'message',
     ];
 
-    $message_table = $migration->getIdMap()->messageTableName();
-    $query = $this->database->select($message_table, 'm')
+    $message_table = $migration_plugin->getIdMap()->messageTableName();
+    $map_table = $migration_plugin->getIdMap()->mapTableName();
+    $query = $this->database->select($message_table, 'msg')
       ->extend('\Drupal\Core\Database\Query\PagerSelectExtender')
       ->extend('\Drupal\Core\Database\Query\TableSortExtender');
-    $query->fields('m');
+    $query->innerJoin($map_table, 'map', 'msg.source_ids_hash=map.source_ids_hash');
+    $query->fields('msg');
+    $query->fields('map');
     $result = $query
       ->limit(50)
       ->orderByHeader($header)

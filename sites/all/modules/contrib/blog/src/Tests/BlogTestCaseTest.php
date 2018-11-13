@@ -9,6 +9,11 @@ namespace Drupal\blog\Tests;
 
 use Drupal\simpletest\WebTestBase;
 
+/**
+ * Test blog functionality.
+ * 
+ * @group blog
+ */
 class BlogTestCaseTest extends WebTestBase {
   
   protected $big_user;
@@ -37,8 +42,8 @@ class BlogTestCaseTest extends WebTestBase {
 
     // Create users.
     $this->big_user = $this->drupalCreateUser(array('administer blocks'));
-    $this->own_user = $this->drupalCreateUser(array('create blog content', 'edit own blog content', 'delete own blog content'));
-    $this->any_user = $this->drupalCreateUser(array('create blog content', 'edit any blog content', 'delete any blog content', 'access administration pages'));
+    $this->own_user = $this->drupalCreateUser(array('create blog_post content', 'edit own blog_post content', 'delete own blog_post content'));
+    $this->any_user = $this->drupalCreateUser(array('create blog_post content', 'edit any blog_post content', 'delete any blog_post content', 'access administration pages'));
   }
 
   /**
@@ -48,7 +53,7 @@ class BlogTestCaseTest extends WebTestBase {
    */
   function testUnprivilegedUser() {
     // Create a blog node for a user with no blog permissions.
-    $this->drupalCreateNode(array('type' => 'blog', 'uid' => $this->big_user->id()));
+    $this->drupalCreateNode(array('type' => 'blog_post', 'uid' => $this->big_user->id()));
 
     $this->drupalLogin($this->big_user);
 
@@ -76,38 +81,30 @@ class BlogTestCaseTest extends WebTestBase {
   function testBlog() {
       
     // Create a node so that the block of recent posts will display.
-    $node = $this->drupalCreateNode(array('type' => 'blog', 'uid' => $this->any_user->id()));
+    $node = $this->drupalCreateNode(array('type' => 'blog_post', 'uid' => $this->any_user->id()));
     
     // Login the admin user.
     $this->drupalLogin($this->big_user);
       
     // Place the recent blog posts block.
-    $blog_block = $this->drupalPlaceBlock('blog_block');
-    print_r($blog_block->label() . "XXXXXXXXXXXXXXXXX \n");
+    $blog_block = $this->drupalPlaceBlock('blog_blockblock-views-block-blog-blog-block');
+    //print_r($blog_block->label() . "XXXXXXXXXXXXXXXXX \n");
 
     // Verify the blog block was displayed.
     $this->drupalGet('<front>');
     $this->assertBlockAppears($blog_block);
-
-    // Verify ability to change number of recent blog posts in block.
-    $edit = array();
-    $edit['settings[blog_block_count]'] = 5;
-    $this->drupalPostForm('admin/structure/block/manage/recentblogposts', $edit, t('Save block'));
-    
-    //todo fix line below variable_get is gone dood.
-    //$this->assertEqual(variable_get('blog_block_count', 10), 5, t('Number of recent blog posts changed.'));
 
     // Do basic tests for each user.
     $this->doBasicTests($this->any_user, TRUE);
     $this->doBasicTests($this->own_user, FALSE);
 
     // Create another blog node for the any blog user.
-    $node = $this->drupalCreateNode(array('type' => 'blog', 'uid' => $this->any_user->id()));
+    $node = $this->drupalCreateNode(array('type' => 'blog_post', 'uid' => $this->any_user->id()));
     // Verify the own blog user only has access to the blog view node.
     $this->verifyBlogs($this->any_user, $node, FALSE, 403);
 
     // Create another blog node for the own blog user.
-    $node = $this->drupalCreateNode(array('type' => 'blog', 'uid' => $this->own_user->id()));
+    $node = $this->drupalCreateNode(array('type' => 'blog_post', 'uid' => $this->own_user->id()));
     // Login the any blog user.
     $this->drupalLogin($this->any_user);
     // Verify the any blog user has access to all the blog nodes.
@@ -126,11 +123,11 @@ class BlogTestCaseTest extends WebTestBase {
     // Login the user.
     $this->drupalLogin($user);
     // Create blog node.
-    $node = $this->drupalCreateNode(array('type' => 'blog'));
+    $node = $this->drupalCreateNode(array('type' => 'blog_post'));
     // Verify the user has access to all the blog nodes.
     $this->verifyBlogs($user, $node, $admin);
     // Create one more node to test the blog page with more than one node
-    $this->drupalCreateNode(array('type' => 'blog', 'uid' => $user->id()));
+    $this->drupalCreateNode(array('type' => 'blog_post', 'uid' => $user->id()));
     // Verify the blog links are displayed.
     $this->verifyBlogLinks($user);
   }
@@ -162,34 +159,34 @@ class BlogTestCaseTest extends WebTestBase {
     $this->drupalGet('node/' . $node->id());
     $this->assertResponse(200);
     $this->assertTitle($node->getTitle() . ' | Drupal', t('Blog node was displayed'));
-    $breadcrumb = array(
-      l(t('Home'), NULL),
-      l(t('Blogs'), 'blog'),
-      l(t("!name's blog", array('!name' => $node_user->getUsername())), 'blog/' . $node_user->id()),
-    );
+    //$breadcrumb = array(
+      //l(t('Home'), NULL),
+      //l(t('Blogs'), 'blog'),
+      //l(t("!name's blog", array('!name' => $node_user->getUsername())), 'blog/' . $node_user->id()),
+    //);
 
-    //todo sort out the breadcrumbs
+    // @todo sort out the breadcrumbs
     //$this->assertRaw(theme('breadcrumb', array('breadcrumb' => $breadcrumb)), t('Breadcrumbs were displayed'));
 
     // View blog edit node.
     $this->drupalGet('node/' . $node->id() . '/edit');
     $this->assertResponse($response);
     if ($response == 200) {
-      $this->assertTitle('Edit Blog entry ' . $node->getTitle() . ' | Drupal', t('Blog edit node was displayed'));
+      $this->assertTitle('Edit Blog post ' . $node->getTitle() . ' | Drupal', t('Blog edit node was displayed'));
     }
 
     if ($response == 200) {
       // Edit blog node.
       $edit = array();
-      $edit["title"] = 'node/' . $node->id();
-      $edit["body[0][value]"] = $this->randomName(256);
+      $edit["title[0][value]"] = 'node/' . $node->id();
+      $edit["body[0][value]"] = $this->randomMachineName(256);
       $this->drupalPostForm('node/' . $node->id() . '/edit', $edit, t('Save'));
-      $this->assertRaw(t('Blog entry %title has been updated.', array('%title' => $edit["title"])), t('Blog node was edited'));
+      $this->assertRaw(t('Blog post %title has been updated.', array('%title' => $edit["title[0][value]"])), t('Blog node was edited'));
 
       // Delete blog node.
       $this->drupalPostForm('node/' . $node->id() . '/delete', array(), t('Delete'));
       $this->assertResponse($response);
-      $this->assertRaw(t('Blog entry %title has been deleted.', array('%title' => $edit["title"])), t('Blog node was deleted'));
+      $this->assertRaw(t('The Blog post %title has been deleted.', array('%title' => $edit["title"])), t('Blog node was deleted'));
     }
   }
 
@@ -212,7 +209,7 @@ class BlogTestCaseTest extends WebTestBase {
     // Confirm a blog page was displayed.
     $this->drupalGet('blog');
     $this->assertResponse(200);
-    $this->assertTitle('Blogs | Drupal', t('Blog page was displayed'));
+    $this->assertTitle('Blog posts | Drupal', t('Blog page was displayed'));
     $this->assertText(t('Home'), t('Breadcrumbs were displayed'));
     $this->assertLink(t('Create new blog entry'));
 
@@ -222,7 +219,7 @@ class BlogTestCaseTest extends WebTestBase {
 
     // Confirm a blog feed was displayed.
     $this->drupalGet('blog/feed');
-    $this->assertTitle(t('Drupal blogs'), t('Blog feed was displayed'));
+    $this->assertTitle(t('Drupal blog posts'), t('Blog feed was displayed'));
 
     // Confirm a blog feed was displayed per user.
     $this->drupalGet('blog/' . $user->id() . '/feed');

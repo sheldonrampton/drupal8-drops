@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\migrate_tools\Form\MigrationAddForm.
- */
-
 namespace Drupal\migrate_tools\Form;
 
 use Drupal\Core\Form\FormStateInterface;
@@ -35,7 +30,6 @@ class MigrationAddForm extends MigrationFormBase {
    */
   protected function actions(array $form, FormStateInterface $form_state) {
     $actions = parent::actions($form, $form_state);
-//    $actions['submit']['#value'] = $this->t('Create Migration');
     unset($actions['submit']);
     return $actions;
   }
