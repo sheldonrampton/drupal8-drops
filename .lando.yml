@@ -1,0 +1,4 @@
+name: sheldonrampton
+recipe: drupal7
+config:
+  webroot: .
