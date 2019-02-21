@@ -201,72 +201,317 @@ h1,h2,h3,h4,h5,h6 {
 -------------------------------------------------------------- */
 
 #menu {
-	height: 35px;
-	background:url(../images/menu-bg.png) repeat-x;
+	height: 34px;
+	background: #14345c; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#14345c, #285c91); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#14345c, #285c91); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#14345c, #285c91); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#14345c, #285c91); /* Standard syntax */
 	width:952px;
 	margin: 0 auto;
+	-webkit-box-shadow: 1px 2px 3px -1px rgba(0,0,0,0.75);
+	-moz-box-shadow: 1px 2px 3px -1px rgba(0,0,0,0.75);
+	box-shadow: 1px 2px 3px -1px rgba(0,0,0,0.75);
+    border-radius: 3px;
 }
 
 #nav {
-	height: 35px;
-	background:url(../images/menu-bg.png) repeat-x;
+	height:34px; 
 	float:left;
 }
 
-#nav ul.menu li {
-	float:left;
-	background:url(../images/menu-separator.png) no-repeat right top;
-	height:35px;
-	padding:0 1px 0 0;
+#nav .contextual-links-region {
+	float: left;
+	z-index:6;
+}
+
+#nav h2 {
+	height: 0;
+	overflow: hidden;
+	position: absolute;
+}
+
+#nav .menu, #nav .menu * {
 	margin:0;
-}
-
-#nav .menu li a{
-	color:#fff;
-	text-decoration:none;
-	font-size:12px;
-	padding:7px 29px 0 29px;
-	display:inline-block;
-	font-weight:bold;
-	height:25px;
-	text-transform:uppercase;
-}
-
-#nav ul.menu li a:hover {
-	background:transparent url(../images/menu-hover-bg.png) repeat-x;
-}
-
-#nav ul.menu li.active-trail a {
-	background:transparent url(../images/menu-hover-bg.png) repeat-x;
-}
-
-#rounded-menu-left {
-	height: 35px;
-	background:transparent url(../images/menu-left-bg.png) no-repeat;
-	float:left;
-	width:1px;
-	line-height:0;
-	font-size:0;
-}
-
-#rounded-menu-right {
-	height: 35px;
-	background:url(../images/menu-right-bg.png) no-repeat;
-	float:right;
-	width:14px;
-	line-height:0;
-	font-size:0;
-}
-
-#nav ul.menu, #nav ul.menu li.leaf {
-	list-style-image:none;
+	padding:0;
 	list-style:none;
 }
 
-#nav ul.menu, #nav .block ul.menu, #nav ol {
-	margin:0;
-	padding:0;
+#nav .menu {
+	line-height:1.0;
 }
+
+#nav .menu ul {
+	position:absolute;
+	top:-999em;
+	width:12em;
+}
+
+#nav .menu ul li {
+	width:100%;
+}
+
+#nav .menu li:hover {
+	visibility:inherit;
+}
+
+#nav .menu li {
+	float:left;
+	position:relative;
+}
+
+#nav .menu a {
+	display:block;
+	position:relative;
+}
+
+#nav .menu li:hover ul,
+#nav .menu li.sfHover ul {
+	left:0;
+	top:34px;
+	z-index:99;
+}
+
+#nav ul.menu li:hover li ul,
+#nav ul.menu li.sfHover li ul {
+	top:-999em;
+}
+
+#nav ul.menu li li:hover ul,
+#nav ul.menu li li.sfHover ul {
+	left:12em;
+	top:0;
+}
+
+#nav ul.menu li li:hover li ul,
+#nav ul.menu li li.sfHover li ul {
+	top:-999em;
+}
+
+#nav ul.menu li li li:hover ul,
+#nav ul.menu li li li.sfHover ul {
+	left:12em;
+	top:0;
+}
+
+#nav .menu {
+	float:left;
+	margin-bottom:1em;
+}
+
+#nav .menu a {
+	padding:.75em 1em;
+	text-decoration:none;
+}
+
+#nav .menu a, #nav .menu a:visited  {
+	color:#fff;
+	text-decoration:none;
+	font-size:12px;
+	font-weight:bold;
+	text-transform:uppercase;
+	padding-right:30px;
+	padding-left:30px;
+	padding-top:12px;
+}
+
+#nav .menu li {
+	border-right: 1px solid #345c8c;
+}
+
+#nav .menu li:last-child {
+	border-right:none;
+}
+
+#nav .menu li li {
+	background: #3b6999;
+	border-right:none;
+}
+
+#nav .menu li li li {
+	background: #3b6999;
+	top: 0px;
+}
+
+#nav .menu li:hover, #nav .menu li.sfHover,
+#nav .menu a:focus, #nav .menu a:hover, #nav .menu a:active {
+	outline:0;
+}
+
+#nav .menu li:hover, 
+#nav .menu li.sfHover,
+#nav .menu a:focus, 
+#nav .menu a:hover, 
+#nav .menu a:active {
+	z-index:10;
+}
+
+#nav .menu li a:hover {
+	background: #142f50; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#142f50, #26507d); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#142f50, #26507d); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#142f50, #26507d); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#142f50, #26507d); /* Standard syntax */
+}
+
+#nav .menu li:first-child a:hover {
+	background: #142f50; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#142f50, #26507d); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#142f50, #26507d); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#142f50, #26507d); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#142f50, #26507d); /* Standard syntax */
+	border-top-left-radius:3px;
+	border-bottom-left-radius:3px; 
+}
+
+#nav .menu li  li:first-child a:hover {
+	background: #3b6999;
+}
+
+#nav .menu li li a:hover {
+	background: #3b6999;
+}
+
+#nav .menu li a.is-active {
+	background: #142f50; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#142f50, #26507d); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#142f50, #26507d); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#142f50, #26507d); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#142f50, #26507d); /* Standard syntax */
+}
+
+#nav .menu li:first-child a.is-active {
+	background: #142f50; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#142f50, #26507d); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#142f50, #26507d); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#142f50, #26507d); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#142f50, #26507d); /* Standard syntax */
+	border-top-left-radius:3px;
+	border-bottom-left-radius:3px; 
+}
+
+#nav .menu li li:first-child a.is-active {
+	background: #3b6999;
+	border-radius: 0px;
+}
+
+#nav .menu li li a.is-active {
+	background: #3b6999;
+	border-radius: 0px;
+}
+
+#nav .menu li.active-trail {
+	background: #142f50; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#142f50, #26507d); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#142f50, #26507d); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#142f50, #26507d); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#142f50, #26507d); /* Standard syntax */
+}
+
+#nav .menu li.active-trail:first-child {
+	background: #142f50; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#142f50, #26507d); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#142f50, #26507d); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#142f50, #26507d); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#142f50, #26507d); /* Standard syntax */
+	border-top-left-radius:3px;
+	border-bottom-left-radius:3px; 
+}
+
+#nav .menu li li.active-trail:first-child {
+	background: #3b6999;
+	border-radius: 0px;
+}
+
+#nav .menu li.active-trail li {
+	background: #3b6999;
+	border-radius: 0px;
+}
+
+#nav .menu li.active-trail a.is-active {
+	background: #142f50; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#142f50, #26507d); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#142f50, #26507d); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#142f50, #26507d); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#142f50, #26507d); /* Standard syntax */
+}
+
+#nav .menu li.active-trail:first-child a.is-active {
+	background: #142f50; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#142f50, #26507d); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#142f50, #26507d); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#142f50, #26507d); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#142f50, #26507d); /* Standard syntax */
+	border-top-left-radius:3px;
+	border-bottom-left-radius:3px; 
+}
+
+#nav .menu li li.active-trail:first-child a.is-active {
+	background: #3b6999;
+	border-radius: 0px;
+}
+
+#nav .menu li.active-trail li a.is-active {
+	background: #3b6999;
+	border-radius: 0px;
+}
+
+#nav .menu li.active-trail li {
+	background: #3b6999;
+}
+
+#nav .menu li li:hover {
+	background: #3b6999;
+}
+
+#nav .menu li li li:hover {
+	background: #3b6999;
+}
+
+#nav .menu ul {
+	box-shadow: 2px 2px 6px rgba(0,0,0,.2);
+	min-width: 12em; /* allow long menu items to determine submenu width */
+	*width: 12em; /* no auto sub width for IE7, see white-space comment below */
+}
+
+/*** arrows (for all except IE7) **/
+.sf-arrows .sf-with-ul {
+	padding-right: 2.5em;
+	*padding-right: 1em; /* no CSS arrows for IE7 (lack pseudo-elements) */
+}
+/* styling for both css and generated arrows */
+.sf-arrows .sf-with-ul:after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	right: 1em;
+	margin-top: -3px;
+	height: 0;
+	width: 0;
+	/* order of following 3 rules important for fallbacks to work */
+	border: 5px solid transparent;
+	border-top-color: #dFeEFF; /* edit this to suit design (no rgba in IE8) */
+	border-top-color: rgba(255,255,255,.5);
+}
+.sf-arrows > li > .sf-with-ul:focus:after,
+.sf-arrows > li:hover > .sf-with-ul:after,
+.sf-arrows > .sfHover > .sf-with-ul:after {
+	border-top-color: white; /* IE8 fallback colour */
+}
+/* styling for right-facing arrows */
+.sf-arrows ul .sf-with-ul:after {
+	margin-top: -5px;
+	margin-right: -3px;
+	border-color: transparent;
+	border-left-color: #dFeEFF; /* edit this to suit design (no rgba in IE8) */
+	border-left-color: rgba(255,255,255,.5);
+}
+.sf-arrows ul li > .sf-with-ul:focus:after,
+.sf-arrows ul li:hover > .sf-with-ul:after,
+.sf-arrows ul .sfHover > .sf-with-ul:after {
+	border-left-color: white;
+}
+
 
 /* slideshow + Preface top + Slideshow
 -------------------------------------------------------------- */

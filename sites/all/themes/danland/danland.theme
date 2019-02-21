@@ -62,6 +62,7 @@ function danland_preprocess_page(&$variables) {
 	
     $mask = '/\.(?:jp[e]?g|gif|png)$/i';
     $files = file_scan_directory(drupal_get_path('theme', 'danland') . '/images/slideshows', $mask);
+    ksort($files);
     $variables['files'] = $files;
         
 }
@@ -73,23 +74,5 @@ function danland_preprocess_block(&$variables) {
     
     $variables['attributes']['class'][] = 'block';
     $variables['title_attributes']['class'][] = 'block-title';
-    
-}
-
-/**
- * Implements template_preprocess_menu().
- */
-function danland_preprocess_menu(&$variables, $hook) {
-
-    if ($hook == 'menu') {
-        $current_path = \Drupal::request()->getRequestUri();
-        $items = $variables['items'];
-        foreach ($items as $key => $item) {
-            // Set an active-trail class if item path matched with current path
-            if ($item['url']->toString() == $current_path) {
-                $item['attributes']->addClass('active-trail');
-            }
-        }
-    }
     
 }

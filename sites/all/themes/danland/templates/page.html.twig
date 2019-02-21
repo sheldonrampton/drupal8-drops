@@ -24,13 +24,11 @@
   <div style="clear:both"></div>
 
   <div id="menu">
-    <div id="rounded-menu-left"></div>
       {% if page.primary_menu %}
         <div id="nav">
           {{ page.primary_menu }}
         </div>
       {% endif %}
-    <div id="rounded-menu-right"></div>
   </div> <!-- end menu -->
 
   <div style="clear:both"></div>
@@ -51,13 +49,13 @@
           </div>
         {% endif %}
         {% if page.slideshow %}
-          <div class="slideshow">
+          <div class="custom-slideshow">
             {{ page.slideshow }}
           </div>
 		{% else %}
           <div class="slideshow">
-            {% for key, file in files %}
-              <img src="{{ key }}" width="100%" height="100%" alt="slideshow 1"/>
+            {% for file in files %}
+              <img src="{{ file.uri }}" width="100%" height="100%" alt="{{ file.name }}"/>
             {% endfor %}
           </div>
         {% endif %}

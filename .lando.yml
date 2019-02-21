@@ -1,4 +1,4 @@
 name: sheldonrampton
-recipe: drupal7
+recipe: drupal8
 config:
   webroot: .

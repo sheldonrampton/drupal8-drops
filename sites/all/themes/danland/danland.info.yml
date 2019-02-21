@@ -35,8 +35,8 @@ regions:
 screenshot: screenshot.png
 libraries:
   - danland/global
-# Information added by Drupal.org packaging script on 2015-12-20
-version: '8.x-1.0-beta3'
+# Information added by Drupal.org packaging script on 2016-01-29
+version: '8.x-1.0'
 core: '8.x'
 project: 'danland'
-datestamp: 1450577343
+datestamp: 1454052240

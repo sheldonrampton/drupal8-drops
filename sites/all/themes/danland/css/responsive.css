@@ -80,6 +80,86 @@
 		border-right: none;
 	}
 	
+	#menu {
+		height: auto;
+		width:100%;
+		margin: 0 auto;
+		border-radius: 0px;
+		background: none;
+		-webkit-box-shadow: none;
+		-moz-box-shadow: none;
+		box-shadow: none;
+	}
+
+	#nav {
+		height: auto;
+		background:none;
+		float:left;
+		padding: 0 10px;
+		margin-top:1em;
+	}
+	
+	#nav .menu li a  {
+		background: #14345c; /* For browsers that do not support gradients */
+		background: -webkit-linear-gradient(#14345c, #285c91); /* For Safari 5.1 to 6.0 */
+		background: -o-linear-gradient(#14345c, #285c91); /* For Opera 11.1 to 12.0 */
+		background: -moz-linear-gradient(#14345c, #285c91); /* For Firefox 3.6 to 15 */
+		background: linear-gradient(#14345c, #285c91); /* Standard syntax */
+	}
+	
+	#nav .menu li li a  {
+		background: #3b6999;
+	}
+
+	#nav .menu li:first-child a:hover {
+		border-top-left-radius:0px;
+		border-bottom-left-radius:0px; 
+	}
+
+	#nav .menu li:first-child a.is-active {
+		border-top-left-radius:0px;
+		border-bottom-left-radius:0px; 
+	}
+
+	#nav .menu li:first-child li a.is-active {
+		border-radius: 0px;
+	}
+
+	#nav .menu li li a.is-active {
+		border-radius: 0px;
+	}
+
+	#nav .menu li.active-trail:first-child {
+		border-top-left-radius:0px;
+		border-bottom-left-radius:0px; 
+	}
+
+	#nav .menu li.active-trail:first-child li {
+		border-radius: 0px;
+	}
+
+	#nav .menu li.active-trail li {
+		border-radius: 0px;
+	}
+
+	#nav .menu li.active-trail:first-child a.is-active {
+		border-top-left-radius:0px;
+		border-bottom-left-radius:0px; 
+	}
+
+	#nav .menu li.active-trail:first-child li a.is-active {
+		border-radius: 0px;
+	}
+
+	#nav .menu li.active-trail li a.is-active {
+		border-radius: 0px;
+	}
+	
+	#nav .menu li:hover ul,
+	#nav .menu li.sfHover ul {
+		top:33px;
+	}
+	
 }
 
 @media all and (max-width: 480px) {
@@ -128,9 +208,13 @@
 	
 	#menu {
 		height: auto;
-		background:none;
 		width:100%;
 		margin: 0 auto;
+		border-radius: 0px;
+		background: none;
+		-webkit-box-shadow: none;
+		-moz-box-shadow: none;
+		box-shadow: none;
 	}
 
 	#nav {
@@ -140,51 +224,69 @@
 		padding: 0 10px;
 		margin-top:1em;
 	}
-
-	#nav ul.menu li {
-		float:left;
-		background:none;
-		height:auto;
-		padding:0 1px 0 0;
-		margin:0;
+	
+	#nav .menu-parent {
+		margin-bottom:0;
+	}
+	
+	#nav .menu li a  {
+		background: #14345c; /* For browsers that do not support gradients */
+		background: -webkit-linear-gradient(#14345c, #285c91); /* For Safari 5.1 to 6.0 */
+		background: -o-linear-gradient(#14345c, #285c91); /* For Opera 11.1 to 12.0 */
+		background: -moz-linear-gradient(#14345c, #285c91); /* For Firefox 3.6 to 15 */
+		background: linear-gradient(#14345c, #285c91); /* Standard syntax */
+	}
+	
+	#nav .menu li li a  {
+		background: #3b6999;
 	}
 
-	#nav .menu li a{
-		color:#333;
-		text-decoration:none;
-		font-size:12px;
-		padding:5px;
-		display:inline-block;
-		font-weight:bold;
-		height:25px;
-		text-transform:normal;
+	#nav .menu li:first-child a:hover {
+		border-top-left-radius:0px;
+		border-bottom-left-radius:0px; 
 	}
 
-	#nav ul.menu li a:hover {
-		background:none;
-		text-decoration:underline;
+	#nav .menu li:first-child a.is-active {
+		border-top-left-radius:0px;
+		border-bottom-left-radius:0px; 
 	}
 
-	#nav ul.menu li.active-trail a {
-		background:none;
-		text-decoration:underline;
+	#nav .menu li:first-child li a.is-active {
+		border-radius: 0px;
 	}
 
-	#rounded-menu-left {
-		display:none;
+	#nav .menu li li a.is-active {
+		border-radius: 0px;
 	}
 
-	#rounded-menu-right {
-		display:none;
+	#nav .menu li.active-trail:first-child {
+		border-top-left-radius:0px;
+		border-bottom-left-radius:0px; 
 	}
 
-	#nav ul.menu, #nav ul.menu li.leaf {
-		list-style-image:none;
-		list-style:none;
+	#nav .menu li.active-trail:first-child li {
+		border-radius: 0px;
 	}
 
-	#nav ul.menu, #nav .block ul.menu, #nav ol {
-		margin:0;
-		padding:0;
+	#nav .menu li.active-trail li {
+		border-radius: 0px;
+	}
+
+	#nav .menu li.active-trail:first-child a.is-active {
+		border-top-left-radius:0px;
+		border-bottom-left-radius:0px; 
+	}
+
+	#nav .menu li.active-trail:first-child li a.is-active {
+		border-radius: 0px;
+	}
+
+	#nav .menu li.active-trail li a.is-active {
+		border-radius: 0px;
+	}
+	
+	#nav .menu li:hover ul,
+	#nav .menu li.sfHover ul {
+		top:33px;
 	}
 }

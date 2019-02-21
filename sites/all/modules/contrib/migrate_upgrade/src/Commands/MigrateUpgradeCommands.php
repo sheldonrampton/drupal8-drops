@@ -38,12 +38,12 @@ class MigrateUpgradeCommands extends DrushCommands {
    *
    * @command migrate:upgrade
    *
-   * @usage migrate-upgrade --legacy-db-url='mysql://root:pass@127.0.0.1/d6'
+   * @usage drush migrate-upgrade --legacy-db-url='mysql://root:pass@127.0.0.1/d6'
    *   Upgrade a Drupal 6 database to Drupal 8
-   * @usage migrate-upgrade --legacy-db-key='drupal_7'
+   * @usage drush migrate-upgrade --legacy-db-key='drupal_7'
    *   Upgrade Drupal 7 database where the connection to Drupal 7 has already
    * been created in settings.php ($databases['drupal_7'])
-   * @usage migrate-upgrade --legacy-db-url='mysql://root:pass@127.0.0.1/d7' --configure-only --migration-prefix=d7_custom_ --legacy-root=https://www.example.com
+   * @usage drush migrate-upgrade --legacy-db-url='mysql://root:pass@127.0.0.1/d7' --configure-only --migration-prefix=d7_custom_ --legacy-root=https://www.example.com
    *   Generate migrations for a custom migration from Drupal 7 to Drupal 8
    *
    * @validate-module-enabled migrate_upgrade
@@ -69,6 +69,8 @@ class MigrateUpgradeCommands extends DrushCommands {
   }
 
   /**
+   * Validation callback for password.
+   *
    * @hook validate migrate:upgrade
    */
   public function validatePassword(CommandData $commandData) {
@@ -82,6 +84,8 @@ class MigrateUpgradeCommands extends DrushCommands {
   }
 
   /**
+   * Legacy database url option.
+   *
    * @hook option migrate:upgrade
    */
   public function legacyDatabaseUrl(Command $command, AnnotationData $annotationData) {
@@ -94,6 +98,8 @@ class MigrateUpgradeCommands extends DrushCommands {
   }
 
   /**
+   * Legacy database key option.
+   *
    * @hook option migrate:upgrade
    */
   public function legacyDatabaseKey(Command $command, AnnotationData $annotationData) {
@@ -106,6 +112,8 @@ class MigrateUpgradeCommands extends DrushCommands {
   }
 
   /**
+   * Legacy database prefix option.
+   *
    * @hook option migrate:upgrade
    */
   public function legacyDatabasePrefix(Command $command, AnnotationData $annotationData) {
@@ -118,6 +126,8 @@ class MigrateUpgradeCommands extends DrushCommands {
   }
 
   /**
+   * Legacy file system root path option.
+   *
    * @hook option migrate:upgrade
    */
   public function legacyRoot(Command $command, AnnotationData $annotationData) {
@@ -130,6 +140,8 @@ class MigrateUpgradeCommands extends DrushCommands {
   }
 
   /**
+   * Configure only option.
+   *
    * @hook option migrate:upgrade
    */
   public function configureOnly(Command $command, AnnotationData $annotationData) {
@@ -142,6 +154,8 @@ class MigrateUpgradeCommands extends DrushCommands {
   }
 
   /**
+   * Prefix all migrations.
+   *
    * @hook option migrate:upgrade
    */
   public function migrationPrefix(Command $command, AnnotationData $annotationData) {
@@ -161,7 +175,7 @@ class MigrateUpgradeCommands extends DrushCommands {
    *   If user chose to not perform the rollback.
    *
    * @command migrate:upgrade-rollback
-   * @usage migrate-upgrade-rollback
+   * @usage drush migrate-upgrade-rollback
    *   Rolls back a previously-run upgrade. It will not rollback migrations
    *   exported as migrate_plus config entities.
    * @validate-module-enabled migrate_upgrade

@@ -7,5 +7,6 @@ global:
       #css/local.css: {}
   js:
     js/jquery.cycle.lite.js: {}
+    js/superfish.js: {}
   dependencies:
     - core/jquery
