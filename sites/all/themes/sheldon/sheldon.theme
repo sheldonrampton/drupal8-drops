@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * Implements template_preprocess_page().
+ */
+function sheldon_preprocess_page(&$variables) {
+    danland_preprocess_page($variables);
+
+    $mask = '/\.(?:jp[e]?g|gif|png)$/i';
+    $files = file_scan_directory(drupal_get_path('theme', 'sheldon') . '/images/slideshows_custom', $mask);
+    ksort($files);
+    $variables['files'] = $files;
+}
